@@ -1,4 +1,5 @@
 const ch = require('cheerio');
+const { getTodayDate } = require('./util');
 
 /**
  *
@@ -23,7 +24,8 @@ function extractData(message) {
       time: getPickupTime(html),
       email,
       pickup: getPickupLocation(html),
-      dropoff: getDropoffLocation(html)
+      dropoff: getDropoffLocation(html),
+      processedOn: getTodayDate()
     }))[0];
 }
 
