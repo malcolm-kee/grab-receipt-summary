@@ -34,7 +34,7 @@ function getTotal(html) {
       return (
         $(this)
           .text()
-          .includes('RM') &&
+          .match(/RM|RP/) &&
         $(this)
           .parent()
           .text()
@@ -52,7 +52,7 @@ function getPickupTime(html) {
       return $(this)
         .parent()
         .text()
-        .includes('Pick-up time');
+        .match(/Pick-up time|WAKTU/);
     })
     .map(getText)
     .get(0);
@@ -64,7 +64,7 @@ function getPickupLocation(html) {
     .filter(function() {
       return $(this)
         .text()
-        .includes('Pick up location:');
+        .match(/Pick up location:|Lokasi Penjemputan:/);
     })
     .siblings('span')
     .map(getText)
@@ -77,7 +77,7 @@ function getDropoffLocation(html) {
     .filter(function() {
       return $(this)
         .text()
-        .includes('Drop off location:');
+        .match(/Drop off location:|Lokasi Tujuan:/);
     })
     .siblings('span')
     .map(getText)

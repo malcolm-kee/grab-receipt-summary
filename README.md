@@ -2,6 +2,11 @@
 
 An utility app to summarize your grab receipt for you to cross-check.
 
+## Supported Countries
+
+- Malaysia
+- Indonesia
+
 ## Installation
 
 1. Enable the gmail api based on this [guide](https://developers.google.com/gmail/api/quickstart/nodejs)

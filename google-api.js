@@ -93,6 +93,7 @@ const getEmails = auth =>
           console.log('API error: ', err);
           return reject(err);
         }
+        console.log('Number of emails returned:', res.data.messages.length);
         fulfill(Promise.all(res.data.messages.map(message => getMessageDetails(auth, message.id))));
       }
     );
