@@ -18,10 +18,15 @@ const checkEmails = () =>
       authorize(JSON.parse(content), auth =>
         getEmails(auth).then(messages => {
           console.log('processed messages', messages);
-          console.log('Saving...');
-          Record.create(messages)
-            .then(fulfill)
-            .catch(reject);
+          if (messages.length > 0) {
+            console.log('Saving...');
+            Record.create(messages)
+              .then(fulfill)
+              .catch(reject);
+          } else {
+            console.log('No email processed. Ending...');
+            fulfill();
+          }
         })
       );
     });
