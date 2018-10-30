@@ -1,3 +1,5 @@
+#!/usr/bin/node
+
 require('./load-env');
 const fs = require('fs');
 const { authorize, getEmails } = require('./google-api');

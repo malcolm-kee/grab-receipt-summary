@@ -1,3 +1,5 @@
+#!/usr/bin/node
+
 require('./load-env');
 const { Parser } = require('json2csv');
 const { connect } = require('./db/connect');
