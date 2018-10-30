@@ -5,7 +5,10 @@ const { extractData } = require('./parser');
 const { getTodayDate } = require('./util');
 
 // If modifying these scopes, delete token.json.
-const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'];
+const SCOPES = [
+  'https://www.googleapis.com/auth/gmail.readonly',
+  'https://www.googleapis.com/auth/gmail.modify'
+];
 const TOKEN_PATH = 'token.json';
 
 /**
@@ -57,7 +60,7 @@ function getNewToken(oAuth2Client, callback) {
   });
 }
 
-const getMessageDetails = (auth, id) =>
+const getEmailDetails = (auth, id) =>
   new Promise((fulfill, reject) => {
     const gmail = google.gmail({ version: 'v1', auth });
     gmail.users.messages.get(
@@ -76,7 +79,36 @@ const getMessageDetails = (auth, id) =>
   });
 
 /**
- * Lists the labels in the user's account.
+ * Mark the message as read
+ *
+ * @param {google.auth.OAuth2} auth
+ * @param {string} id
+ */
+const markEmailAsRead = (auth, id) =>
+  new Promise((fulfill, reject) => {
+    const gmail = google.gmail({ version: 'v1', auth });
+
+    gmail.users.messages.modify(
+      {
+        id,
+        userId: 'me',
+        resource: {
+          removeLabelIds: ['UNREAD']
+        }
+      },
+      err => {
+        if (err) {
+          console.log('API error: ', err);
+          return reject(err);
+        }
+        console.log('Successfully mark message as read.');
+        fulfill();
+      }
+    );
+  });
+
+/**
+ * Get all the unread messages with "grab" in the subject
  *
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
@@ -86,7 +118,7 @@ const getEmails = auth =>
     gmail.users.messages.list(
       {
         userId: 'me',
-        q: `after:${getTodayDate()} subject:grab`
+        q: `label:unread subject:grab`
       },
       (err, res) => {
         if (err) {
@@ -95,9 +127,7 @@ const getEmails = auth =>
         }
         console.log('Number of emails returned:', res.data.resultSizeEstimate);
         if (res.data.resultSizeEstimate > 0 && Array.isArray(res.data.messages)) {
-          fulfill(
-            Promise.all(res.data.messages.map(message => getMessageDetails(auth, message.id)))
-          );
+          fulfill(res.data.messages);
         } else {
           fulfill([]);
         }
@@ -107,5 +137,7 @@ const getEmails = auth =>
 
 module.exports = {
   authorize,
-  getEmails
+  getEmails,
+  getEmailDetails,
+  markEmailAsRead
 };
