@@ -23,8 +23,8 @@ const sendEmail = (
     .send({
       to,
       from: {
-        name: 'Malcolm Kee',
-        email: 'malcolm.keeweesiong@gmail.com'
+        name: 'Grab Assistant',
+        email: 'grab.receipts.summary@gmail.com'
       },
       subject,
       text,
