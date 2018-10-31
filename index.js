@@ -2,14 +2,17 @@
 
 require('./load-env');
 const fs = require('fs');
+const path = require('path');
 const { authorize, getEmails, getEmailDetails, markEmailAsRead } = require('./google-api');
 const { connect } = require('./db/connect');
 const { Record } = require('./db/model');
 
+const credentialFilePath = path.resolve(__dirname, 'credentials.json');
+
 const checkEmails = () =>
   new Promise((fulfill, reject) => {
     // Load client secrets from a local file.
-    fs.readFile('credentials.json', (err, content) => {
+    fs.readFile(credentialFilePath, (err, content) => {
       if (err) {
         console.log('Error loading client secret file:', err);
         return reject(err);

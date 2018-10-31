@@ -1,20 +1,20 @@
 const fs = require('fs');
+const path = require('path');
 const readline = require('readline');
 const { google } = require('googleapis');
 const { extractData } = require('./parser');
-const { getTodayDate } = require('./util');
 
 // If modifying these scopes, delete token.json.
 const SCOPES = [
   'https://www.googleapis.com/auth/gmail.readonly',
   'https://www.googleapis.com/auth/gmail.modify'
 ];
-const TOKEN_PATH = 'token.json';
+const TOKEN_PATH = path.resolve(__dirname, 'token.json');
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
  * given callback function.
- * @param {Object} credentials The authorization client credentials.
+ * @param {Object} credentials The authorization client `credentials.`
  * @param {function} callback The callback to call with the authorized client.
  */
 function authorize(credentials, callback) {
