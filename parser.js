@@ -70,6 +70,7 @@ function getPickupLocation(html) {
     })
     .siblings('span')
     .map(getText)
+    .map(replaceLocationName)
     .get(0);
 }
 
@@ -83,6 +84,7 @@ function getDropoffLocation(html) {
     })
     .siblings('span')
     .map(getText)
+    .map(replaceLocationName)
     .get(0);
 }
 
@@ -90,6 +92,22 @@ function getText() {
   return ch(this)
     .text()
     .trim();
+}
+
+/**
+ *
+ * @param {string} original
+ */
+function replaceLocationName(_, original) {
+  if (/Widya Chandra/.test(original)) {
+    return 'Office';
+  }
+
+  if (/Wahid Hasyim/.test(original)) {
+    return 'Aloft Hotel';
+  }
+
+  return original;
 }
 
 module.exports = {
